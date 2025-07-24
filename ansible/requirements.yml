@@ -3,7 +3,7 @@ roles:
   - name: geerlingguy.repo-epel
     version: 3.1.1
   - name: geerlingguy.docker
-    version: 7.3.0
+    version: 7.4.7
   - name: geerlingguy.ansible
     version: 2.3.0
   - name: geerlingguy.apache
@@ -11,22 +11,22 @@ roles:
   - name: geerlingguy.nodejs
     version: 7.0.0
   - name: willshersystems.sshd
-    version: v0.24.1
+    version: v0.27.0
   - name: weareinteractive.sudo
     version: 1.14.1
 
 collections:
   - name: ansible.posix
-    version: 1.5.4
+    version: 2.1.0
     source: https://galaxy.ansible.com
   - name: community.general
-    version: 9.2.0
+    version: 10.7.1 
     source: https://galaxy.ansible.com
   - name: devsec.hardening
-    version: 9.0.1
+    version: 10.3.0
     source: https://galaxy.ansible.com
   - name: prometheus.prometheus
-    version: 0.17.0
+    version: 0.27.0
     source: https://galaxy.ansible.com
   - name: grafana.grafana
-    version: 5.4.0
+    version: 6.0.2
