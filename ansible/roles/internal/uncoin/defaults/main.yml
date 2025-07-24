@@ -1,0 +1,4 @@
+---
+uncoin_repo_url: git@github.com:callysto/uncoin.git
+uncoin_repo_branch: main
+uncoin_dest: '/srv/uncoin'

@@ -1,0 +1,12 @@
+[Unit]
+Description=Syzygy Uncoin service
+After=multi-user.target
+[Service]
+Type=simple
+Restart=always
+ExecStart=python3 '{{ uncoin_dest }}/uncoin/uncoin.py' -i /var/run/uncoin/latest.json -a -o /var/log/uncoin.log
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+

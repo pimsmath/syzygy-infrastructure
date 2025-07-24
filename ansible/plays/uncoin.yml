@@ -1,0 +1,7 @@
+## Install and configure uncoin
+---
+- name: Apply roles
+  hosts: hub
+  roles:
+    - role: uncoin
+      become: yes

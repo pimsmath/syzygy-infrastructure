@@ -1,0 +1,35 @@
+---
+- name: Install psutil
+  pip: name='psutil' executable='{{ python3_pip_executable }}'
+
+- name: Add github deploy key to server
+  copy:
+    content: '{{ uncoin_deploy_key.src }}'
+    dest: '{{ uncoin_deploy_key.dest }}'
+    mode: 0600
+    owner: root
+    group: root
+
+- name: Clone uncoin repository
+  git:
+    repo: '{{ uncoin_repo_url }}'
+    version: '{{ uncoin_repo_branch }}'
+    dest: '{{ uncoin_dest }}'
+    accept_newhostkey: true
+    key_file: '{{ uncoin_deploy_key.dest }}'
+
+- name: Create workdir
+  ansible.builtin.file:
+    path: /var/run/uncoin
+    state: directory
+    mode: 0700
+
+- name: Install service config
+  template:
+    src: 'uncoin.service.j2'
+    dest: '/etc/systemd/system/uncoin.service'
+
+- name: Copy config
+  copy:
+    src: '{{ uncoin_hashes }}'
+    dest: '/var/run/uncoin/latest.json'
