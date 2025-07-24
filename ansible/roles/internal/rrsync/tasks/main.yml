@@ -68,10 +68,13 @@
   become: False
   when: not ansible_check_mode
 
-# ssh_config management relies on stormssh
+# The depenency here is on the system python of the target
+# host. That's the thing being used by ssh_config (next)
 - name: Dependencies
-  ansible.builtin.pip:
-    name: paramiko
+  yum:
+    name: python3-paramiko
+    state: present
+    update_cache: yes
 
 - name: Configure rrsync ssh
   community.general.ssh_config:
