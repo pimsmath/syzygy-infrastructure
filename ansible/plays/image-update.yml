@@ -1,0 +1,26 @@
+## Update the container image on hubs
+# Old images can (and should) be removed at the same time
+---
+- name: Setup generic environment
+  hosts: hub
+  become: true
+  tasks:
+    - name: Gather Docker objects
+      community.docker.docker_image_info:
+      register: docker_objects
+
+    - name: Show docker objects
+      debug:
+        var: docker_objects
+
+    - name: Remove old images
+      community.docker.docker_image:
+        state: absent
+        name: "{{ item }}"
+      loop:
+        - 'sha256:139e89949a31ea13e771583732e886548c19ad541f702636862c9e1f9714d14e'
+
+    - name: Get Docker image for JupyterHub containers
+      community.docker.docker_image_pull:
+        name: '{{ jupyterhub_docker_container }}'
+
