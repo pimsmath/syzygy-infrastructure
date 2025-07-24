@@ -54,6 +54,8 @@
   ansible.builtin.pip:
     name: jupyterhub 
     version: '{{ jupyterhub_version }}'
+  notify:
+    - Restart JupyterHub
 
 - name: Install configurable-http-proxy
   npm:
@@ -61,6 +63,8 @@
     state: present
     global: yes
     version: '{{ jupyterhub_chp_version }}'
+  notify:
+    - Restart CHP
 
 - name: Create JupyterHub Config Directory
   file:
