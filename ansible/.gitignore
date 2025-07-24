@@ -16,3 +16,4 @@ collections/external
 group_vars/*/local_vars.yml
 host_vars/*
 inventory
+files/stats_sd_conf
