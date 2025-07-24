@@ -19,3 +19,6 @@ letsencrypt/*/certs
 letsencrypt/*/chains
 ansible/group_vars/all/stats_api.yml
 ansible/collections
+ansible/plays/files/dashboards/
+ansible/plays/files/uncoin_latest.json
+
