@@ -98,3 +98,13 @@
   args:
     creates: '/{{ zfs_pool_name }}/home'
   when: zfs_vdev_config is defined
+
+- name: Set kernel tunables
+  template:
+    src: zfs-modprobe.conf.j2
+    dest: /etc/modprobe.d/zfs.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Modprobe zfs

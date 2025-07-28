@@ -1,0 +1,9 @@
+{% if zfs_arc_max is defined %}
+options zfs zfs_arc_max={{ zfs_arc_max }}
+{% endif %}
+{% if zfs_arc_min is defined %}
+options zfs zfs_arc_min={{ zfs_arc_min }}
+{% endif %}
+{% if zfs_prefetch_disable is defined %}
+options zfs zfs_prefetch_disable=1
+{% endif %}
