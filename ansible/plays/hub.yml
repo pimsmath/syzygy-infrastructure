@@ -45,7 +45,7 @@
           domain: '*'
           limit_type: soft
           limit_item: nproc
-          value: 131072
+          value: '{{ pam_limit_nproc | default(131072) }}'
         - dest: /etc/security/limits.d/20-nproc.conf
           domain: 'root'
           limit_type: soft
@@ -55,7 +55,7 @@
           domain: '*'
           limit_type: soft
           limit_item: nofile
-          value: 32768
+          value: '{{ pam_limit_nofiles | default(32768) }}'
 
     - name: Install Python Environment
       become: true
