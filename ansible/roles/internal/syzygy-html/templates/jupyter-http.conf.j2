@@ -35,6 +35,7 @@ RequestHeader unset Shib-Authentication-Instant
   SSLProxyCheckPeerExpire off
 
   Header always set Strict-Transport-Security "max-age=15768000"
+  Header always set Content-Security-Policy "frame-ancestors 'self'"
 
   Protocols h2 http/1.1
 {% if jupyterhub_authenticator == 'shib' %}
