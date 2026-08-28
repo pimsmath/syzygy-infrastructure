@@ -1,6 +1,6 @@
 [nodesource-nodejs]
-name=Node.js Packages for Linux RPM based distros - {{ ansible_architecture }}
-baseurl=https://rpm.nodesource.com/pub_{{ nodejs_version}}/nodistro/nodejs/{{ ansible_architecture }}
+name=Node.js Packages for Linux RPM based distros - {{ ansible_facts['architecture'] }}
+baseurl=https://rpm.nodesource.com/pub_{{ nodejs_version}}/nodistro/nodejs/{{ ansible_facts['architecture'] }}
 priority=9
 enabled=1
 gpgcheck=1
@@ -8,8 +8,8 @@ gpgkey=https://rpm.nodesource.com/gpgkey/ns-operations-public.key
 module_hotfixes=1
 
 [nodesource-nsolid]
-name=N|Solid Packages for Linux RPM based distros - {{ ansible_architecture }}
-baseurl=https://rpm.nodesource.com/pub_{{ nodejs_version }}/nodistro/nsolid/{{ ansible_architecture }}
+name=N|Solid Packages for Linux RPM based distros - {{ ansible_facts['architecture'] }}
+baseurl=https://rpm.nodesource.com/pub_{{ nodejs_version }}/nodistro/nsolid/{{ ansible_facts['architecture'] }}
 priority=9
 enabled=1
 gpgcheck=1

@@ -1,0 +1,5 @@
+ssh_public_keys:
+  zfs_migrate:
+    user: ptty2u
+    state: present
+    public_key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpuYqiwMbyfy5tzRC7KiNWgSF4TbtXbvTqGDv6Eib7w ptty2u@athabascau.syzygy.ca

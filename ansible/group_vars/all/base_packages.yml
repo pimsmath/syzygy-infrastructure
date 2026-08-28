@@ -4,3 +4,4 @@ base_packages:
   - tmux
   - wget
   - nc
+  - yum-utils

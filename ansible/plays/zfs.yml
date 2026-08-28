@@ -1,0 +1,69 @@
+## Manages a JuptyerHub installation
+---
+- name: Setup generic environment
+  hosts: hub
+  tasks:
+    # Add relevant keys to `ssh_public_keys`
+    # in either host_vars, group_vars, or local_vars.
+    - name: Manage SSH public keys
+      tags: ["ssh"]
+      ansible.posix.authorized_key:
+        user: "{{ item.value.user }}"
+        state: "{{ item.value.state }}"
+        key: "{{ item.value.public_key }}"
+      with_dict: "{{ ssh_public_keys }}"
+      when: ssh_public_keys is defined
+
+    - name: Install Base Packages
+      become: true
+      tags: ["base-packages"]
+      ansible.builtin.yum:
+        name: "{{ item }}"
+        state: present
+      with_items: "{{ base_packages }}"
+      when: base_packages | length > 0
+
+    - name: Set SELinux as permissive
+      become: true
+      ansible.posix.selinux:
+        policy: targeted
+        state: permissive
+    
+    - name: Update all packages
+      become: true
+      yum:
+        name: "*"
+        state: latest
+      ignore_errors: true
+    - name: Check needs-restarting status
+      become: true
+      command: needs-restarting -r
+      register: command_restart
+      failed_when: command_restart.rc not in [0, 1]
+      check_mode: no
+      changed_when: false
+
+    - name: Reboot instance
+      become: true
+      reboot:
+        reboot_timeout: 300
+        pre_reboot_delay: 30
+        post_reboot_delay: 30
+      when: command_restart.rc == 1
+
+- name: Apply roles
+  hosts: hub
+  roles:
+    - { role: geerlingguy.repo-epel, become: yes }
+    - { role: weareinteractive.sudo, become: yes }
+    - { role: devsec.hardening.ssh_hardening, become: yes }
+
+    - role: zfs
+      become: true
+      tags:
+        - zfs
+
+    - role: zfs-snapshot
+      become: true
+      tags:
+        - zfs
