@@ -3,7 +3,7 @@ ARCH := $(shell uname -m)
 TOP := $(shell pwd)
 TF_PATH := $(TOP)/../terraform
 
-GROUP ?= prod
+GROUP ?= dra
 
 PLAYBOOK_CMD = TF_STATE=$(TF_PATH)/infrastructure/$(GROUP)/$(ENV) ansible-playbook --vault-password-file=../keys/ansible-vault -i ./inventory
 ANSIBLE_CMD = TF_STATE=$(TF_PATH)/infrastructure/$(GROUP)/$(ENV) ansible  --vault-password-file=../keys/ansible-vault -i ./inventory

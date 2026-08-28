@@ -18,9 +18,9 @@
         state: absent
         name: "{{ item }}"
       loop:
-        - 'sha256:139e89949a31ea13e771583732e886548c19ad541f702636862c9e1f9714d14e'
+        - 'sha256:38c25be492d32d220ff6749b7a8d04815273c93aa31f81eec32398448257e583'
 
     - name: Get Docker image for JupyterHub containers
       community.docker.docker_image_pull:
-        name: '{{ jupyterhub_docker_container }}'
+        name: "{{ jupyterhub_docker_container | default('docker.io/pimsubc/pims-r:latest')}}"
 

@@ -9,8 +9,8 @@ export PATH := $(CURDIR)/bin/:$(CURDIR)/bin/$(UNAME):$(PATH)
 
 SHELL := /bin/bash
 
-PLAYBOOK_CMD = TF_STATE=$(TF_PATH)/infrastructure/prod/$(ENV) ansible-playbook --private-key=../keys/id_rsa --vault-password-file=../keys/ansible-vault -i ./inventory
-ANSIBLE_CMD = TF_STATE=$(TF_PATH)/infrastructure/prod/$(ENV) ansible --private-key=../keys/id_rsa --vault-password-file=../keys/ansible-vault -i ./inventory
+PLAYBOOK_CMD = TF_TERRAGRUNT=1 TF_STATE=$(TF_PATH)/infrastructure/prod/$(ENV) ansible-playbook --private-key=../keys/id_rsa --vault-password-file=../keys/ansible-vault -i ./inventory
+ANSIBLE_CMD = TF_TERRAGRUNT=1 TF_STATE=$(TF_PATH)/infrastructure/prod/$(ENV) ansible --private-key=../keys/id_rsa --vault-password-file=../keys/ansible-vault -i ./inventory
 
 help: tasks
 
