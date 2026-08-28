@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
+LOGFILE=/var/log/dehydrated.log
 cd ~{{ acme_user }}
-sudo -u {{ acme_user }} -- {{ dehydrated_install_root }}/dehydrated --cron --config ./config.sh --ipv4 --accept-terms &> /dev/null
+sudo -u {{ acme_user }} -- {{ dehydrated_install_root }}/dehydrated --cron --config ./config.sh --ipv4 --accept-terms >> "$LOGFILE" 2>&1
+DEHYDRATED_EXIT=$?
 # Check for certificate newer than last restart
 for c in certs/*/cert.pem; do
     [ "$c" -nt certs/.stamp ] && { RESTART=1; break; }
@@ -11,3 +13,4 @@ done
     systemctl restart "{{ apache_service | default('httpd') }}"
     mailx -s "`hostname` Certificate renewed, server restarted" {{ acme_email }} </dev/null >&/dev/null
 }
+exit $DEHYDRATED_EXIT

@@ -57,12 +57,23 @@
     mode: "0644"
     owner: root
     group: root
-  notify: 
-   - restart apache
-   - Run dehydrate
+  register: acme_conf
+  notify:
+    - Run dehydrate
+
+- name: Restart apache to load acme config
+  service:
+    name: "{{ apache_service | default('httpd') }}"
+    state: restarted
+  when: acme_conf.changed
 
 - name: Add cron job
   file: src="{{ acme_home }}/wrapper.sh" dest="/etc/cron.daily/dehydrated-letsencrypt" state=link
+
+- name: Remove stale dehydrated lock file
+  file:
+    path: '{{ acme_home }}/challenge/.lock'
+    state: absent
 
 - name: Flush handlers for dehydrate
   meta: flush_handlers
