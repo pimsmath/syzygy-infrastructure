@@ -4,18 +4,18 @@ jupyterhub_user_uid: 9999
 
 jupyterhub_srv_dir: '/srv/jupyterhub'
 
-jupyterhub_version: 5.3.0
-jupyterhub_chp_version: 5.0.1
+jupyterhub_version: 5.5.1
+jupyterhub_chp_version: 5.3.0
 
 jupyterhub_ip: 127.0.0.1
 
-jupyterhub_api_ip: '{{ ansible_docker0.ipv4.address }}'
+jupyterhub_api_ip: '{{ ansible_docker0.ipv4.address | default("172.17.0.1") }}'
 jupyterhub_api_port: '8081'
 
 jupyterhub_proxy_ip: '127.0.0.1'
 jupyterhub_proxy_port: '8000'
 
-jupyterhub_proxy_api_ip: '{{ ansible_docker0.ipv4.address }}'
+jupyterhub_proxy_api_ip: '{{ ansible_docker0.ipv4.address | default("172.17.0.1") }}'
 jupyterhub_proxy_api_port: '8001'
 
 jhub_docker_cull_run_s: 1200
