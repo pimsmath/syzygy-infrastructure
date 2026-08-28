@@ -13,6 +13,22 @@
   check_mode: no
   changed_when: false
 
+- name: Check if the device is mounted
+  command: "lsblk -no mountpoint {{ openstack_ephemeral_docker_disk }}"
+  when: openstack_ephemeral_docker_disk != ""
+  register: mountpoint_ephemeral
+  check_mode: no
+  changed_when: false
+
+- name: Unmount the device
+  ansible.posix.mount:
+    path: "{{ mountpoint_ephemeral.stdout }}"
+    state: absent
+  when:
+    - openstack_ephemeral_docker_disk != ""
+    - mountpoint_ephemeral.stdout | trim == "/mnt"
+
+
 - name: Create an XFS filesystem on the storage
   filesystem:
     fstype: xfs
@@ -39,6 +55,6 @@
   when: restartdocker_ephemeral.changed
 
 - name: update facts if docker0 is not defined
-  action: setup filter="ansible_docker0"
-  when: ansible_docker0 is not defined
+  action: setup filter="ansible_facts['docker0']"
+  when: ansible_facts['docker0'] is not defined
 
