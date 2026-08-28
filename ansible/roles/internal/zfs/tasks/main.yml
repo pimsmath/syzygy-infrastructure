@@ -3,13 +3,13 @@
 - name: Check distro version
   shell: cat /etc/centos-release
   register: result
-  when: ansible_distribution == "CentOS"
+  when: ansible_facts['distribution'] == "CentOS"
   check_mode: no
   changed_when: false
 
 - name: Set zfs_distro_version if RedHat
   set_fact:
-    zfs_distro_version: "{{ ansible_distribution_version }}"
+    zfs_distro_version: "{{ ansible_facts['distribution_version'] }}"
   when: zfs_distro_version is undefined
 
 - name: Install kernel headers
