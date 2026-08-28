@@ -21,4 +21,6 @@ ansible/group_vars/all/stats_api.yml
 ansible/collections
 ansible/plays/files/dashboards/
 ansible/plays/files/uncoin_latest.json
-
+ansible/inventory-ubc
+ansible/parallel
+bin/Darwin/ansible-terraform-inventory_v*
