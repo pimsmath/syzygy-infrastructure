@@ -68,11 +68,11 @@
         name: docker
 
     - name: Ensure cryptsetup is installed
-      yum:
+      ansible.builtin.yum:
         name: cryptsetup
 
     - name: Ensure dm_crypt module is loaded
-      modprobe:
+      community.general.modprobe:
         name: dm_crypt
 
     - name: Ensure Python 3 is installed

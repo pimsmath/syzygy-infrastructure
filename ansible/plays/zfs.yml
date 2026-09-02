@@ -11,7 +11,7 @@
         user: "{{ item.value.user }}"
         state: "{{ item.value.state }}"
         key: "{{ item.value.public_key }}"
-      with_dict: "{{ ssh_public_keys }}"
+      loop: "{{ ssh_public_keys | dict2items }}"
       when: ssh_public_keys is defined
 
     - name: Install Base Packages
@@ -20,7 +20,7 @@
       ansible.builtin.yum:
         name: "{{ item }}"
         state: present
-      with_items: "{{ base_packages }}"
+      loop: "{{ base_packages }}"
       when: base_packages | length > 0
 
     - name: Set SELinux as permissive
@@ -31,13 +31,13 @@
     
     - name: Update all packages
       become: true
-      yum:
+      ansible.builtin.yum:
         name: "*"
         state: latest
       ignore_errors: true
     - name: Check needs-restarting status
       become: true
-      command: needs-restarting -r
+      ansible.builtin.command: needs-restarting -r
       register: command_restart
       failed_when: command_restart.rc not in [0, 1]
       check_mode: no
@@ -45,7 +45,7 @@
 
     - name: Reboot instance
       become: true
-      reboot:
+      ansible.builtin.reboot:
         reboot_timeout: 300
         pre_reboot_delay: 30
         post_reboot_delay: 30
@@ -53,9 +53,25 @@
 
 - name: Apply roles
   hosts: hub
+  pre_tasks:
+    - name: Install sudo
+      become: yes
+      ansible.builtin.package:
+        name: sudo
+        state: present
+
+    - name: Configure sudoers defaults
+      become: yes
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/ansible
+        content: "# Ansible managed\nDefaults !requiretty\n"
+        validate: /usr/sbin/visudo -cf %s
+        owner: root
+        group: root
+        mode: "0440"
+
   roles:
     - { role: geerlingguy.repo-epel, become: yes }
-    - { role: weareinteractive.sudo, become: yes }
     - { role: devsec.hardening.ssh_hardening, become: yes }
 
     - role: zfs

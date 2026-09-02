@@ -10,20 +10,20 @@
         ansible_ssh_pipelining: no
   tasks:
     - name: Update all packages
-      yum:
+      ansible.builtin.yum:
         name: "*"
         state: latest
       ignore_errors: true
 
     - name: Check needs-restarting status
-      command: needs-restarting -r
+      ansible.builtin.command: needs-restarting -r
       register: command_restart
       failed_when: command_restart.rc not in [0, 1]
       check_mode: no
       changed_when: false
 
     - name: Reboot instance
-      reboot:
+      ansible.builtin.reboot:
         reboot_timeout: 300
         pre_reboot_delay: 30
         post_reboot_delay: 30
