@@ -79,9 +79,9 @@
            {% if shib_idp_metadata_uri is defined %}
             uri="{{ shib_idp_metadata_uri }}"
            {% else %}
-            uri="file:///etc/shibboleth/{{ ansible_hostname }}_idp-metadata.xml"
+            uri="file:///etc/shibboleth/{{ ansible_facts['hostname'] }}_idp-metadata.xml"
            {% endif %}
-            backingFilePath="/etc/shibboleth/{{ ansible_hostname }}_idp-metadata.xml"
+            backingFilePath="/etc/shibboleth/{{ ansible_facts['hostname'] }}_idp-metadata.xml"
             reloadInterval="7200"> 
         </MetadataProvider>
 

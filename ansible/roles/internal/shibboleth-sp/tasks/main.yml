@@ -1,7 +1,7 @@
 ---
 - name: Include OS-specific variables.
   tags: shibboleth
-  include_vars: "{{ ansible_os_family }}.yml"
+  include_vars: "{{ ansible_facts['os_family'] }}.yml"
 
 - name: Configure Shibboleth YUM repository
   template:
@@ -121,7 +121,7 @@
 - name: Populate IdP metadata from uri
   get_url:
     url: '{{ shib_idp_metadata_uri }}'
-    dest: '/etc/shibboleth/{{ ansible_hostname }}_idp-metadata.xml'
+    dest: '/etc/shibboleth/{{ ansible_facts["hostname"] }}_idp-metadata.xml'
     owner: root
     group: root
     mode: 0444
@@ -133,7 +133,7 @@
   when: shib_idp_metadata_uri is undefined
   copy:
     content: '{{ shib_idp_metadata_file }}'
-    dest: '/etc/shibboleth/{{ ansible_hostname }}_idp-metadata.xml'
+    dest: '/etc/shibboleth/{{ ansible_facts["hostname"] }}_idp-metadata.xml'
     owner: root
     group: root
     mode: 0444

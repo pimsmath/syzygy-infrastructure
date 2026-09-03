@@ -110,7 +110,7 @@
 
         <MetadataProvider type="XML" {% if shib_metadata_validate %}validate="true"{% endif %}
             url="{{ shib_idp_metadata_uri }}"
-            backingFilePath="/etc/shibboleth/{{ ansible_hostname }}_idp-metadata.xml"
+            backingFilePath="/etc/shibboleth/{{ ansible_facts['hostname'] }}_idp-metadata.xml"
             reloadInterval="86400" />
 
         <!-- Chain the two built-in trust engines together. -->
