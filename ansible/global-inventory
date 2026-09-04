@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    tf_state_root = '../terraform/infrastructure/prod'
+    tf_state_root = f"../terraform/infrastructure/{os.environ.get('TF_GROUP', 'dra')}"
     
     if args.host:
         hosts = args.host
@@ -38,7 +38,7 @@ if __name__ == "__main__":
         myenv['TF_STATE'] = f"{tf_state_root}/{host}"
         d = json.loads(
                 check_output(
-                    ['./inventory', '-list'], 
+                    ['./inventory/inventory', '-list'],
                     env=myenv
                 )
             )

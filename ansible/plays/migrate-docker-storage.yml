@@ -1,0 +1,91 @@
+---
+# One-time migration: remount extra ephemeral storage from /var/lib/docker
+# to /var/lib/containerd to match the new docker-ce storage layout.
+# Safe to re-run: skips hosts already on the new path or with no extra disk.
+- name: Migrate docker extra storage to /var/lib/containerd
+  hosts: hub
+  become: yes
+
+  tasks:
+    - name: Check current mount point of ephemeral disk
+      command: "lsblk -no mountpoint {{ openstack_ephemeral_docker_disk }}"
+      when: openstack_ephemeral_docker_disk != ""
+      register: current_mountpoint
+      check_mode: no
+      changed_when: false
+
+    - name: Migrate mount from /var/lib/docker to /var/lib/containerd
+      when:
+        - openstack_ephemeral_docker_disk != ""
+        - current_mountpoint.stdout | default('') | trim == "/var/lib/docker"
+      block:
+        - name: Save list of existing docker images
+          ansible.builtin.shell: "docker images --format '{{ '{{' }}.Repository{{ '}}' }}:{{ '{{' }}.Tag{{ '}}' }}' | grep -v '<none>'"
+          register: existing_images
+          changed_when: false
+          failed_when: false
+
+        - name: Stop docker
+          service:
+            name: docker
+            state: stopped
+
+        - name: Stop containerd
+          service:
+            name: containerd
+            state: stopped
+
+        - name: Unmount /var/lib/docker
+          ansible.posix.mount:
+            path: /var/lib/docker
+            state: unmounted
+
+        - name: Remove /var/lib/docker and its contents
+          file:
+            path: /var/lib/docker
+            state: absent
+
+        - name: Remove /var/lib/docker from fstab
+          ansible.posix.mount:
+            path: /var/lib/docker
+            state: absent
+
+        - name: Recreate XFS filesystem on ephemeral disk
+          filesystem:
+            fstype: xfs
+            force: yes
+            dev: "{{ openstack_ephemeral_docker_disk }}"
+
+        - name: Remove existing /var/lib/containerd to avoid it being shadowed by the new mount
+          file:
+            path: /var/lib/containerd
+            state: absent
+
+        - name: Recreate /var/lib/containerd as clean mount point
+          file:
+            path: /var/lib/containerd
+            state: directory
+            mode: "0711"
+            owner: root
+            group: root
+
+        - name: Mount ephemeral disk at /var/lib/containerd and persist to fstab
+          ansible.posix.mount:
+            src: "{{ openstack_ephemeral_docker_disk }}"
+            path: /var/lib/containerd
+            fstype: xfs
+            state: mounted
+
+        - name: Start containerd
+          service:
+            name: containerd
+            state: started
+
+        - name: Start docker
+          service:
+            name: docker
+            state: started
+
+        - name: Re-pull docker images
+          ansible.builtin.command: "docker pull {{ item }}"
+          loop: "{{ existing_images.stdout_lines | default([]) }}"

@@ -7,8 +7,8 @@ GROUP ?= dra
 
 PLAYBOOK_CMD = TF_STATE=$(TF_PATH)/infrastructure/$(GROUP)/$(ENV) ansible-playbook --vault-password-file=../keys/ansible-vault -i ./inventory
 ANSIBLE_CMD = TF_STATE=$(TF_PATH)/infrastructure/$(GROUP)/$(ENV) ansible  --vault-password-file=../keys/ansible-vault -i ./inventory
-GLOBAL_PLAYBOOK_CMD = ansible-playbook --vault-password-file=../keys/ansible-vault -i ./global-inventory
-ANSIBLE_CMD = ansible  --vault-password-file=../keys/ansible-vault -i ./global-inventory
+GLOBAL_PLAYBOOK_CMD = TF_GROUP=$(GROUP) ansible-playbook --vault-password-file=../keys/ansible-vault -i ./global-inventory
+GLOBAL_ANSIBLE_CMD = TF_GROUP=$(GROUP) ansible  --vault-password-file=../keys/ansible-vault -i ./global-inventory
 
 help: tasks
 
@@ -31,6 +31,7 @@ ifndef ENV
 else
 ifeq ($(ENV),all)
 export PLAYBOOK_CMD = $(GLOBAL_PLAYBOOK_CMD)
+export ANSIBLE_CMD = $(GLOBAL_ANSIBLE_CMD)
 endif
 endif
 
