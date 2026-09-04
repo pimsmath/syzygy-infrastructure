@@ -11,6 +11,7 @@ inventory = {
     'jupyter' : {'children': [] },
 }
 
+non_hubs = ["dashboard"]
 
 if __name__ == "__main__":
 
@@ -32,6 +33,8 @@ if __name__ == "__main__":
         hosts = args.host
     else:
         hosts = next(os.walk(tf_state_root))[1]
+
+    hosts = [host for host in hosts if host not in non_hubs]
 
     for host in hosts:
         myenv = os.environ.copy()
