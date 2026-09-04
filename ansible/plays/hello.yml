@@ -1,0 +1,9 @@
+---
+- name: Hello world
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Hello
+      ansible.builtin.debug:
+        msg: "Hello from {{ inventory_hostname }}"
