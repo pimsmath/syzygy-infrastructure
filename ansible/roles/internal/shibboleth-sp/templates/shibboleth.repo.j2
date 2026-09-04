@@ -1,5 +1,5 @@
 [security_shibboleth]
-name=Shibboleth (CentOS {{ ansible_distribution_major_version }})
+name=Shibboleth (CentOS {{ ansible_facts['distribution_major_version'] }})
 type=rpm-md
 mirrorlist=https://shibboleth.net/cgi-bin/mirrorlist.cgi/rockylinux9
 gpgcheck=1
