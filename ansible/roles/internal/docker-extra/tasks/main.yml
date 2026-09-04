@@ -40,7 +40,7 @@
 - name: Mount the ephemeral for docker
   mount:
     src: '{{ openstack_ephemeral_docker_disk}}'
-    path: '/var/lib/docker'
+    path: '/var/lib/containerd'
     fstype: 'xfs'
     state: 'mounted'
   when: openstack_ephemeral_docker_disk != ""
