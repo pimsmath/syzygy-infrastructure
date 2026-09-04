@@ -1,0 +1,16 @@
+---
+- name: Restart configurable-http-proxy and JupyterHub
+  hosts: hub
+  become: yes
+  gather_facts: false
+
+  tasks:
+    - name: Restart configurable-http-proxy
+      service:
+        name: configurable-http-proxy
+        state: restarted
+
+    - name: Restart jupyterhub
+      service:
+        name: jupyterhub
+        state: restarted
