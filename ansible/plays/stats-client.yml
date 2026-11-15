@@ -1,0 +1,9 @@
+## Manages a JuptyerHub installation
+---
+- name: Apply roles
+  hosts: hub
+  roles:
+    - role: prometheus-target
+      become: yes
+      tags:
+        - prometheus

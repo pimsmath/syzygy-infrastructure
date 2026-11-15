@@ -4,8 +4,8 @@ jupyterhub_user_uid: 9999
 
 jupyterhub_srv_dir: '/srv/jupyterhub'
 
-jupyterhub_version: 5.5.1
-jupyterhub_chp_version: 5.3.0
+jupyterhub_version: 5.5.4
+jupyterhub_chp_version: 5.4.0
 
 jupyterhub_ip: 127.0.0.1
 
